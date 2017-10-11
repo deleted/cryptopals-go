@@ -38,17 +38,16 @@ func isASCII(str string) bool {
 }
 
 type Attempt struct {
-	key   byte
-	text  string
-	score float64
+	Score float64
+	Key   byte
+	Text  string
 }
 
 func NewXorAttempt(cyphertext string, key byte, letterFreqs *[]float64) *Attempt {
 	a := new(Attempt)
-	a.key = key
-	a.text = SingleByteXOR(cyphertext, key)
-	a.score = a.computeScore(letterFreqs)
-	// a.score = ComputeFrequencyScore(a.text, letterFreqs)
+	a.Key = key
+	a.Text = SingleByteXOR(cyphertext, key)
+	a.Score = a.computeScore(letterFreqs)
 	return a
 }
 
@@ -56,12 +55,12 @@ func (a Attempt) computeScore(letterFreqs *[]float64) float64 {
 	score := 0.0
 
 	// Any non-ascii characters immediately disqualify
-	if !isASCII(a.text) {
+	if !isASCII(a.Text) {
 		return 0.0
 	}
 
 	// strings get points for having letters and spaces, lose points for having non-ascii characters
-	for _, r := range a.text {
+	for _, r := range a.Text {
 		if r > 'a' && r < 'z' {
 			score++
 		}
@@ -70,20 +69,19 @@ func (a Attempt) computeScore(letterFreqs *[]float64) float64 {
 		}
 	}
 
-	score += 100 * ComputeFrequencyScore(a.text, letterFreqs)
+	score += 100 * ComputeFrequencyScore(a.Text, letterFreqs)
 
 	return score
 }
 
-func BruteForceXorCrack(cyphertext string, letterFreqs *[]float64) string {
+func BruteForceXorCrack(cyphertext string, letterFreqs *[]float64) []*Attempt {
 	attempts := make([]*Attempt, 0, 256)
 	for i := 0x00; i <= 0xff; i++ {
 		a := NewXorAttempt(cyphertext, byte(i), letterFreqs)
 		attempts = append(attempts, a)
 	}
-	sort.Slice(attempts, func(i, j int) bool { return attempts[i].score > attempts[j].score })
-	// for _, a := range attempts {
-	// 	fmt.Printf("%f: %q\n", a.score, a.text)
-	// }
-	return attempts[0].text
+
+	// Sort by score
+	sort.Slice(attempts, func(i, j int) bool { return attempts[i].Score > attempts[j].Score })
+	return attempts
 }
