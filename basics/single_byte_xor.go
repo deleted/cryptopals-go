@@ -1,7 +1,6 @@
 package basics
 
 import (
-	"fmt"
 	"sort"
 	"unicode"
 )
@@ -38,44 +37,9 @@ func isASCII(str string) bool {
 	return true
 }
 
-type runeFreq struct {
-	r     rune
-	count int
-}
-
-type runeCounter map[rune]int
-
-func (rc runeCounter) consume(input string) {
-	for _, r := range input {
-		rc[r]++
-	}
-}
-
-// Return the n most frequent runes
-func (rc runeCounter) top(n int) []runeFreq {
-	runeCounts := make([]runeFreq, 0, len(rc))
-	for r, count := range rc {
-		rf := runeFreq{r, count}
-		runeCounts = append(runeCounts, rf)
-	}
-	sort.Slice(runeCounts, func(i, j int) bool { return runeCounts[i].count > runeCounts[j].count })
-	if len(runeCounts) >= n {
-		return runeCounts[0:n]
-	}
-	return runeCounts
-
-}
-
-func countRunes(input string) runeCounter {
-	results := make(runeCounter)
-	results.consume(input)
-	return results
-}
-
 type Attempt struct {
 	key   byte
 	text  string
-	freqs runeCounter
 	score float64
 }
 
@@ -83,8 +47,6 @@ func NewXorAttempt(cyphertext string, key byte, letterFreqs *[]float64) *Attempt
 	a := new(Attempt)
 	a.key = key
 	a.text = SingleByteXOR(cyphertext, key)
-	a.freqs = make(runeCounter)
-	a.freqs.consume(a.text)
 	a.score = a.computeScore(letterFreqs)
 	// a.score = ComputeFrequencyScore(a.text, letterFreqs)
 	return a
@@ -110,30 +72,18 @@ func (a Attempt) computeScore(letterFreqs *[]float64) float64 {
 
 	score += 100 * ComputeFrequencyScore(a.text, letterFreqs)
 
-	// boost score for having frequent lettsers in the top runes.
-	// topRunes := make(map[rune]bool)
-	// for _, rf := range a.freqs.top(10) {
-	// 	topRunes[rf.r] = true
-	// }
-	// letterFreqs := "etaoinsrhldcumfpgwybvkxjqz" // most common letters in the english language
-	// bonus := len(letterFreqs)
-	// for _, l := range letterFreqs {
-	// 	if topRunes[l] || topRunes[unicode.ToUpper(l)] {
-	// 		score += bonus
-	// 	}
-	// 	bonus--
-	// }
 	return score
 }
 
-func BruteForceXorCrack(cyphertext string, letterFreqs *[]float64) {
+func BruteForceXorCrack(cyphertext string, letterFreqs *[]float64) string {
 	attempts := make([]*Attempt, 0, 256)
 	for i := 0x00; i <= 0xff; i++ {
 		a := NewXorAttempt(cyphertext, byte(i), letterFreqs)
 		attempts = append(attempts, a)
 	}
 	sort.Slice(attempts, func(i, j int) bool { return attempts[i].score > attempts[j].score })
-	for _, a := range attempts {
-		fmt.Printf("%f: %q\n", a.score, a.text)
-	}
+	// for _, a := range attempts {
+	// 	fmt.Printf("%f: %q\n", a.score, a.text)
+	// }
+	return attempts[0].text
 }

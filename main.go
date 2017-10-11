@@ -3,6 +3,7 @@ package main
 import (
 	"cryptopals/basics"
 	"flag"
+	"fmt"
 	"log"
 )
 
@@ -20,7 +21,8 @@ func challenge_3() {
 	*/
 	letterFrequencies := basics.LoadLetterFrequencies("./data/letter_frequencies.json")
 	cypher := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	basics.BruteForceXorCrack(cypher, &letterFrequencies)
+	result := basics.BruteForceXorCrack(cypher, &letterFrequencies)
+	fmt.Println(result)
 }
 
 func main() {
@@ -38,5 +40,4 @@ func main() {
 	}
 
 	fcn()
-	// challenge_3()
 }
