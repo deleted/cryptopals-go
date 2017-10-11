@@ -9,6 +9,17 @@ func TestEncryption(t *testing.T) {
 
 	val := Encrypt(input, key)
 	if val != expected {
-		t.Errorf("Expected:\n%s\n\nGot:\n%s", expected, val)
+		dist := HammingDistance(val, expected)
+		t.Errorf("Expected:\n%s\n\nGot:\n%s\nHamming Distance: %d", expected, val, dist)
+	}
+}
+
+func TestHammingDistance(t *testing.T) {
+	inputA := "this is a test"
+	inputB := "wokka wokka!!!"
+	expectedDistance := 37
+	dist := HammingDistance(inputA, inputB)
+	if dist != expectedDistance {
+		t.Errorf("Expected distance: %d Got %d", expectedDistance, dist)
 	}
 }
