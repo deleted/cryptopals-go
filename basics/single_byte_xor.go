@@ -1,6 +1,7 @@
 package basics
 
 import (
+	"cryptopals/frequency"
 	"sort"
 	"unicode"
 )
@@ -38,25 +39,27 @@ func isASCII(str string) bool {
 }
 
 type Attempt struct {
-	Score float64
-	Key   byte
-	Text  string
+	Score  float64
+	Key    byte
+	Text   string
+	Cypher string
 }
 
-func NewXorAttempt(cyphertext string, key byte, letterFreqs *[]float64) *Attempt {
+func NewXorAttempt(cyphertext string, key byte) *Attempt {
 	a := new(Attempt)
 	a.Key = key
 	a.Text = SingleByteXOR(cyphertext, key)
-	a.Score = a.computeScore(letterFreqs)
+	a.Cypher = cyphertext
+	a.Score = a.computeScore()
 	return a
 }
 
-func (a Attempt) computeScore(letterFreqs *[]float64) float64 {
+func (a Attempt) computeScore() float64 {
 	score := 0.0
 
 	// Any non-ascii characters immediately disqualify
 	if !isASCII(a.Text) {
-		return 0.0
+		score--
 	}
 
 	// strings get points for having letters and spaces, lose points for having non-ascii characters
@@ -69,15 +72,15 @@ func (a Attempt) computeScore(letterFreqs *[]float64) float64 {
 		}
 	}
 
-	score += 100 * ComputeFrequencyScore(a.Text, letterFreqs)
+	score += 100 * frequency.ComputeFrequencyScore(a.Text)
 
 	return score
 }
 
-func BruteForceXorCrack(cyphertext string, letterFreqs *[]float64) []*Attempt {
+func BruteForceXorCrack(cyphertext string) []*Attempt {
 	attempts := make([]*Attempt, 0, 256)
 	for i := 0x00; i <= 0xff; i++ {
-		a := NewXorAttempt(cyphertext, byte(i), letterFreqs)
+		a := NewXorAttempt(cyphertext, byte(i))
 		attempts = append(attempts, a)
 	}
 

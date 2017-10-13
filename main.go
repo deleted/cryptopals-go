@@ -24,16 +24,14 @@ func challenge_3(args ...string) {
 
 		How? Devise some method for "scoring" a piece of English plaintext. Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 	*/
-	letterFrequencies := basics.LoadLetterFrequencies("./data/letter_frequencies.json")
 	cypher := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	results := basics.BruteForceXorCrack(cypher, &letterFrequencies)
+	results := basics.BruteForceXorCrack(cypher)
 	fmt.Println(results[0].Text)
 }
 
 func challenge_4(args ...string) {
 	datafilename := "./data/4.txt"
-	letterFrequencies := basics.LoadLetterFrequencies("./data/letter_frequencies.json")
-	result := basics.ParallelXorSolve(datafilename, letterFrequencies)
+	result := basics.ParallelXorSolve(datafilename)
 	fmt.Println(result)
 }
 
@@ -54,8 +52,9 @@ func challenge_6(args ...string) {
 	b64EncodedCypher, _ := ioutil.ReadFile("./data/6.txt")
 	cypherBytes := make([]byte, len(b64EncodedCypher))
 	_, _ = base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
-	solution := repeatingKey.Break(cypherBytes)
-	fmt.Println(solution)
+	key, solution := repeatingKey.Break(cypherBytes)
+	fmt.Printf("Key: %s (%x) \n", string(key), string(key))
+	fmt.Println(string(solution))
 }
 
 func main() {

@@ -12,6 +12,10 @@ func Hex2Bytes(input string) []byte {
 	return bytes
 }
 
+func Bytes2Hex(input []byte) string {
+	return hex.EncodeToString(input)
+}
+
 func Hex2base64(hexInput string) string {
 	bytes := Hex2Bytes(hexInput)
 	return base64.StdEncoding.EncodeToString(bytes)

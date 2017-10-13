@@ -17,7 +17,7 @@ One of the 60-character strings in this file has been encrypted by single-charac
 Find it.
 */
 
-func ParallelXorSolve(filename string, letterFreqs []float64) string {
+func ParallelXorSolve(filename string) string {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -29,7 +29,7 @@ func ParallelXorSolve(filename string, letterFreqs []float64) string {
 
 	solve := func(cypher string) {
 		defer wg.Done()
-		results := BruteForceXorCrack(cypher, &letterFreqs)
+		results := BruteForceXorCrack(cypher)
 		bestAttemptChan <- results[0]
 	}
 

@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 )
 
-func repeatingXor(input string, key string) []byte {
+func RepeatingXor(input []byte, key []byte) []byte {
 	output := make([]byte, len(input))
 	keyLength := len(key)
 	for i := 0; i < len(input); i++ {
@@ -14,8 +14,8 @@ func repeatingXor(input string, key string) []byte {
 }
 
 func Encrypt(plaintext string, key string) string {
-	// textBytes := []byte(plaintext)
-	// keyBytes := []byte(key)
-	cypher := repeatingXor(plaintext, key)
+	textBytes := []byte(plaintext)
+	keyBytes := []byte(key)
+	cypher := RepeatingXor(textBytes, keyBytes)
 	return hex.EncodeToString(cypher)
 }

@@ -5,7 +5,7 @@ import (
 	"math/bits"
 )
 
-func HammingDistance(x, y string) int {
+func HammingDistance(x, y []byte) int {
 	if len(x) != len(y) {
 		log.Fatal("inputs must be the same length")
 	}
