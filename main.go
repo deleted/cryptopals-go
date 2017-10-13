@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"cryptopals/basics"
 	"cryptopals/repeatingKey"
+	"encoding/base64"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -48,11 +50,20 @@ func challenge_5(args ...string) {
 	fmt.Println(output)
 }
 
+func challenge_6(args ...string) {
+	b64EncodedCypher, _ := ioutil.ReadFile("./data/6.txt")
+	cypherBytes := make([]byte, len(b64EncodedCypher))
+	_, _ = base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
+	solution := repeatingKey.Break(cypherBytes)
+	fmt.Println(solution)
+}
+
 func main() {
 	fnMap := map[string]func(...string){
 		"3": challenge_3,
 		"4": challenge_4,
 		"5": challenge_5,
+		"6": challenge_6,
 	}
 	flag.Parse()
 	if len(flag.Args()) < 1 {
