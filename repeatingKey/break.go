@@ -13,7 +13,6 @@ func Break(cypher []byte) (key []byte, plaintext []byte) {
 	fmt.Printf("%d blocks of size %d\n", len(blocks), len(blocks[0]))
 
 	transposed := transpose(blocks)
-	// fmt.Printf("%d blocks of size %d\n", len(transposed), len(transposed[0]))
 	key = solveSubkeyBlocks(transposed)
 
 	plaintext = RepeatingXor(cypher, key)
@@ -68,12 +67,10 @@ func findKeysize(cypher *[]byte, minSize int, maxSize int) int {
 	sort.Slice(tries, func(i, j int) bool {
 		return tries[i].normalizedDistance < tries[j].normalizedDistance
 	})
-	// fmt.Println(tries)
 	return tries[0].keysize
 }
 
 func getBlocks(src []byte, size int) []block {
-	// fmt.Printf("Getting %d-blocks from source length %d\n", size, len(src))
 	blocks := make([]block, 0, len(src)%size)
 	for i := 0; i+size < len(src); i += size {
 		blocks = append(blocks, src[i:i+size])
@@ -103,12 +100,7 @@ func solveSubkeyBlocks(blocks []block) (key []byte) {
 	key = make([]byte, len(blocks))
 
 	for i, block := range blocks {
-		fmt.Printf("%x\n", block[:12])
 		attempts := basics.BruteForceXorCrack(basics.Bytes2Hex(block))
-		// for _, attempt := range attempts {
-		// fmt.Printf("%x: %f\n", attempt.Key, attempt.Score)
-		// fmt.Printf("%x: %x ==> %x\n", attempt.Key, attempt.Cypher[:12], attempt.Text[:12])
-		// }
 		key[i] = attempts[0].Key
 	}
 

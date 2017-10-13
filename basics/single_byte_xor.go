@@ -39,17 +39,15 @@ func isASCII(str string) bool {
 }
 
 type Attempt struct {
-	Score  float64
-	Key    byte
-	Text   string
-	Cypher string
+	Score float64
+	Key   byte
+	Text  string
 }
 
 func NewXorAttempt(cyphertext string, key byte) *Attempt {
 	a := new(Attempt)
 	a.Key = key
 	a.Text = SingleByteXOR(cyphertext, key)
-	a.Cypher = cyphertext
 	a.Score = a.computeScore()
 	return a
 }
