@@ -100,7 +100,7 @@ func solveSubkeyBlocks(blocks []block) (key []byte) {
 	key = make([]byte, len(blocks))
 
 	for i, block := range blocks {
-		attempts := basics.BruteForceXorCrack(basics.Bytes2Hex(block))
+		attempts := basics.BruteForceXorCrack(block)
 		key[i] = attempts[0].Key
 	}
 

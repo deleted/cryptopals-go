@@ -27,7 +27,7 @@ func ParallelXorSolve(filename string) string {
 	var wg sync.WaitGroup
 	bestAttemptChan := make(chan *Attempt)
 
-	solve := func(cypher string) {
+	solve := func(cypher []byte) {
 		defer wg.Done()
 		results := BruteForceXorCrack(cypher)
 		bestAttemptChan <- results[0]
@@ -36,8 +36,9 @@ func ParallelXorSolve(filename string) string {
 	count := 0
 	for scanner.Scan() {
 		cypher := scanner.Text()
+		cypherBytes := Hex2Bytes(cypher)
 		wg.Add(1)
-		go solve(cypher)
+		go solve(cypherBytes)
 		count++
 	}
 

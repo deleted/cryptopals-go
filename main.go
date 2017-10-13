@@ -25,7 +25,7 @@ func challenge_3(args ...string) {
 		How? Devise some method for "scoring" a piece of English plaintext. Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 	*/
 	cypher := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	results := basics.BruteForceXorCrack(cypher)
+	results := basics.BruteForceXorCrack(basics.Hex2Bytes(cypher))
 	fmt.Println(results[0].Text)
 }
 

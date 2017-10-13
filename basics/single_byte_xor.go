@@ -20,8 +20,7 @@ How? Devise some method for "scoring" a piece of English plaintext. Character fr
 
 const cyphertext string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
-func SingleByteXOR(cypher string, key byte) string {
-	bytes := Hex2Bytes(cypher)
+func SingleByteXOR(bytes []byte, key byte) string {
 	decoded := make([]byte, len(bytes))
 	for i := 0; i < len(bytes); i++ {
 		decoded[i] = bytes[i] ^ key
@@ -44,7 +43,7 @@ type Attempt struct {
 	Text  string
 }
 
-func NewXorAttempt(cyphertext string, key byte) *Attempt {
+func NewXorAttempt(cyphertext []byte, key byte) *Attempt {
 	a := new(Attempt)
 	a.Key = key
 	a.Text = SingleByteXOR(cyphertext, key)
@@ -75,7 +74,7 @@ func (a Attempt) computeScore() float64 {
 	return score
 }
 
-func BruteForceXorCrack(cyphertext string) []*Attempt {
+func BruteForceXorCrack(cyphertext []byte) []*Attempt {
 	attempts := make([]*Attempt, 0, 256)
 	for i := 0x00; i <= 0xff; i++ {
 		a := NewXorAttempt(cyphertext, byte(i))
