@@ -1,4 +1,4 @@
-package repeatingKey
+package blocks
 
 import (
 	"log"

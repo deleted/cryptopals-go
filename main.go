@@ -2,15 +2,25 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	myAES "cryptopals/aes"
 	"cryptopals/basics"
 	"cryptopals/repeatingKey"
 	"encoding/base64"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 )
+
+func check(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func challenge_3(args ...string) {
 	/*
@@ -54,15 +64,59 @@ func challenge_6(args ...string) {
 	_, _ = base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
 	key, solution := repeatingKey.Break(cypherBytes)
 	fmt.Printf("Key: %s (%x) \n", string(key), string(key))
-	fmt.Println(string(solution))
+	fmt.Print(string(solution))
+}
+
+func challenge_7(args ...string) {
+	b64EncodedCypher, err := ioutil.ReadFile("./data/7.txt")
+	cypherBytes := make([]byte, len(b64EncodedCypher))
+	bytesRead, err := base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
+	fmt.Printf("Read %d bytes\n", bytesRead)
+	if err != nil {
+		log.Fatal()
+	}
+	key := "YELLOW SUBMARINE"
+	plainText := myAES.DecryptECB(cypherBytes, []byte(key))
+	fmt.Println(string(plainText))
+}
+
+func challenge_8(args ...string) {
+	filename := "./data/8.txt"
+	for _, line := range readLines(filename) {
+		cypher, err := hex.DecodeString(line)
+		check(err)
+		ecb := myAES.DetectECB(cypher)
+		if ecb {
+			fmt.Println("ECB Detected")
+			fmt.Println(basics.Bytes2Hex(cypher))
+		}
+	}
+}
+
+func challenge_10(args ...string) {
+	filename := "./data/10.txt"
+	b64EncodedCypher, err := ioutil.ReadFile(filename)
+	cypherBytes := make([]byte, len(b64EncodedCypher))
+	bytesRead, err := base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
+
+	fmt.Printf("Read %d bytes\n", bytesRead)
+	key := []byte("YELLOW SUBMARINE")
+	iv := bytes.Repeat([]byte{0x00}, len(key))
+	check(err)
+	fmt.Printf("IV: %x\n", iv)
+	clearBytes := myAES.DecryptCBC(cypherBytes, key, iv)
+	fmt.Print(string(clearBytes))
 }
 
 func main() {
 	fnMap := map[string]func(...string){
-		"3": challenge_3,
-		"4": challenge_4,
-		"5": challenge_5,
-		"6": challenge_6,
+		"3":  challenge_3,
+		"4":  challenge_4,
+		"5":  challenge_5,
+		"6":  challenge_6,
+		"7":  challenge_7,
+		"8":  challenge_8,
+		"10": challenge_10,
 	}
 	flag.Parse()
 	if len(flag.Args()) < 1 {
@@ -75,4 +129,12 @@ func main() {
 	}
 
 	fcn(flag.Args()...)
+}
+
+func readLines(filename string) []string {
+	dat, err := ioutil.ReadFile(filename)
+	check(err)
+	str := string(dat)
+	return strings.Split(str, "\n")
+
 }
