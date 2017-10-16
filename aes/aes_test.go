@@ -12,10 +12,20 @@ func TestPadByte(t *testing.T) {
 	}
 }
 
+func TestEBCRoundTrip(t *testing.T) {
+	testTxt := []byte("scoobidy do derp dip flight attendante prepare for arrival etc. doo ya!!!")
+	key := []byte("YELLOW SUBMARINE")
+	cypherBytes := EncryptECB(testTxt, key)
+	plainBytes := DecryptECB(cypherBytes, key)
+	if !bytes.Equal(plainBytes, padToBlockSize(testTxt, len(key))) {
+		t.Errorf("Wrong result: %s", plainBytes)
+	}
+}
+
 func TestCBCRoundTrip(t *testing.T) {
 	testTxt := []byte("scoobidy do derp dip flight attendante prepare for arrival etc. doo ya!!!")
 	key := []byte("YELLOW SUBMARINE")
-	zero := []byte("\x00")
+	zero := []byte{0x00}
 	iv := bytes.Repeat(zero, len(key))
 
 	cypherBytes := EncryptCBC(testTxt, key, iv)

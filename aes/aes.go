@@ -13,8 +13,26 @@ func check(err error) {
 	}
 }
 
+func EncryptECB(plainBytes, key []byte) []byte {
+	blockSize := len(key)
+	if len(plainBytes)%blockSize != 0 {
+		plainBytes = padToBlockSize(plainBytes, blockSize)
+	}
+	inBuf := bytes.NewBuffer(plainBytes)
+	outBuf := new(bytes.Buffer)
+	cypher, err := aes.NewCipher(key)
+	check(err)
+
+	dst := make([]byte, blockSize)
+	for inBuf.Len() > 0 {
+		cypher.Encrypt(dst, inBuf.Next(blockSize))
+		outBuf.Write(dst)
+	}
+	return outBuf.Bytes()
+}
+
 func DecryptECB(cypherBytes, key []byte) []byte {
-	cypher, _ := aes.NewCipher([]byte(key))
+	cypher, _ := aes.NewCipher(key)
 	plainText := make([]byte, len(cypherBytes))
 	blockSize := cypher.BlockSize()
 
