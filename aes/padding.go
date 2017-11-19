@@ -27,23 +27,19 @@ func PadBlock(block []byte, size int) []byte {
 	return output
 }
 
-func padToBlockSize(input []byte, blockSize int) []byte {
+func PKCS7Pad(input []byte, blockSize int) []byte {
 	if len(input)%blockSize == 0 {
 		return input
 	}
 	out := input
-	for len(out)%blockSize != 0 {
+	paddingLength := blockSize - (len(input) % blockSize)
+	paddingByte := byte(paddingLength)
+	for i := 0; i < paddingLength; i++ {
 		out = append(out, paddingByte)
 	}
-	return out
-}
-
-// Break src into blocks of the given size, padding the end if nessecary
-func getBlocks(src []byte, size int) [][]byte {
-	src = padToBlockSize(src, size)
-	blocks := make([][]byte, 0, len(src)/size)
-	for i := 0; i+size < len(src); i += size {
-		blocks = append(blocks, src[i:i+size])
+	if len(out)%blockSize != 0 {
+		log.Fatal("This is fucked!")
 	}
-	return blocks
+	return out
+
 }

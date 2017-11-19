@@ -6,7 +6,7 @@ import "bytes"
 func TestPadByte(t *testing.T) {
 	testBlock := []byte("YELLOW SUBMARINE")
 	expectedResult := []byte("YELLOW SUBMARINE\x04\x04\x04\x04")
-	result := PadBlock(testBlock, 20)
+	result := PKCS7Pad(testBlock, 20)
 	if !bytes.Equal(result, expectedResult) {
 		t.Fail()
 	}
@@ -17,7 +17,7 @@ func TestEBCRoundTrip(t *testing.T) {
 	key := []byte("YELLOW SUBMARINE")
 	cypherBytes := EncryptECB(testTxt, key)
 	plainBytes := DecryptECB(cypherBytes, key)
-	if !bytes.Equal(plainBytes, padToBlockSize(testTxt, len(key))) {
+	if !bytes.Equal(plainBytes, PKCS7Pad(testTxt, len(key))) {
 		t.Errorf("Wrong result: %s", plainBytes)
 	}
 }
@@ -31,7 +31,24 @@ func TestCBCRoundTrip(t *testing.T) {
 	cypherBytes := EncryptCBC(testTxt, key, iv)
 	plainBytes := DecryptCBC(cypherBytes, key, iv)
 	// fmt.Println(plainBytes)
-	if !bytes.Equal(plainBytes, padToBlockSize(testTxt, len(key))) {
+	if !bytes.Equal(plainBytes, PKCS7Pad(testTxt, len(key))) {
 		t.Error(string(plainBytes))
+	}
+}
+
+func TestPKCS7Padding(t *testing.T) {
+	testBlock := []byte("abcdef")
+	var padded []byte
+	padded = PKCS7Pad(testBlock, 8)
+	if !bytes.Equal(padded, []byte("abcdef\x02\x02")) {
+		t.Error("Unexpected padding result", string(padded))
+	}
+	padded = PKCS7Pad(testBlock, 10)
+	if !bytes.Equal(padded, []byte("abcdef\x04\x04\x04\x04")) {
+		t.Error("Unexpected padding result", string(padded))
+	}
+	padded = PKCS7Pad(testBlock, 6)
+	if !bytes.Equal(padded, []byte("abcdef")) {
+		t.Error("Unexpected padding result", string(padded))
 	}
 }

@@ -16,7 +16,7 @@ func check(err error) {
 func EncryptECB(plainBytes, key []byte) []byte {
 	blockSize := len(key)
 	if len(plainBytes)%blockSize != 0 {
-		plainBytes = padToBlockSize(plainBytes, blockSize)
+		plainBytes = PKCS7Pad(plainBytes, blockSize)
 	}
 	inBuf := bytes.NewBuffer(plainBytes)
 	outBuf := new(bytes.Buffer)
@@ -72,7 +72,7 @@ func EncryptCBC(clearBytes, key, iv []byte) (cypherBytes []byte) {
 
 	for inputBuf.Len() > 0 {
 		nextBlock := inputBuf.Next(blockSize)
-		nextBlock = padToBlockSize(nextBlock, blockSize)
+		nextBlock = PKCS7Pad(nextBlock, blockSize)
 		src := blockXOR(nextBlock, prevBlock)
 		cypher.Encrypt(dest, src)
 		prevBlock = dest

@@ -12,8 +12,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 func check(err error) {
@@ -108,6 +110,24 @@ func challenge_10(args ...string) {
 	fmt.Print(string(clearBytes))
 }
 
+func challenge_11(args ...string) {
+	filename := "./data/booker_prize.txt"
+	funtext, err := ioutil.ReadFile(filename)
+	check(err)
+	// funtext := bytes.Repeat([]byte("?"), 2048)
+	nTrials := 1000
+	succeessCount := 0
+	rand.Seed(time.Now().Unix())
+	for i := 0; i < nTrials; i++ {
+		success := myAES.EncryptionOracle(funtext)
+		if success {
+			succeessCount++
+		}
+	}
+	fmt.Printf("Success rate: %.2f\n", float32(succeessCount)/float32(nTrials)*100)
+
+}
+
 func main() {
 	fnMap := map[string]func(...string){
 		"3":  challenge_3,
@@ -117,6 +137,7 @@ func main() {
 		"7":  challenge_7,
 		"8":  challenge_8,
 		"10": challenge_10,
+		"11": challenge_11,
 	}
 	flag.Parse()
 	if len(flag.Args()) < 1 {
