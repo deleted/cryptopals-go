@@ -5,6 +5,7 @@ import (
 	"bytes"
 	myAES "cryptopals/aes"
 	"cryptopals/basics"
+	"cryptopals/oracle"
 	"cryptopals/repeatingKey"
 	"encoding/base64"
 	"encoding/hex"
@@ -119,7 +120,7 @@ func challenge_11(args ...string) {
 	succeessCount := 0
 	rand.Seed(time.Now().Unix())
 	for i := 0; i < nTrials; i++ {
-		success := myAES.EncryptionOracle(funtext)
+		success := oracle.EncryptionOracle(funtext)
 		if success {
 			succeessCount++
 		}

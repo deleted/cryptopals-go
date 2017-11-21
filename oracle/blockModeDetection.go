@@ -1,7 +1,8 @@
-package aes
+package oracle
 
 import (
 	"bytes"
+	myAES "cryptopals/aes"
 	"fmt"
 	"log"
 	"math/rand"
@@ -44,15 +45,15 @@ func EncryptionOracle(input []byte) (success bool) {
 
 	switch mode {
 	case ECB:
-		cypherbytes = EncryptECB(input, key)
+		cypherbytes = myAES.EncryptECB(input, key)
 	case CBC:
 		iv := randomBytes(len(key))
-		cypherbytes = EncryptCBC(input, key, iv)
+		cypherbytes = myAES.EncryptCBC(input, key, iv)
 	default:
 		log.Fatal(fmt.Sprintf("Unknown mode: %d", mode))
 	}
 
-	ecbDetected := DetectECB(cypherbytes)
+	ecbDetected := myAES.DetectECB(cypherbytes)
 	if ecbDetected == (mode == ECB) {
 		success = true
 		fmt.Printf("Mode %d detected successfully!\n", mode)
