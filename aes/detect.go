@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-func DetectECB(input []byte) (hasRepeats bool) {
+func DetectECB(input []byte) (isECB bool) {
 	for blockSize := 16; blockSize >= 4; blockSize /= 2 {
 		bc := tallyBlocks(input, blockSize)
 		if anyRepeats(bc) {

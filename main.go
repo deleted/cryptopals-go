@@ -5,6 +5,7 @@ import (
 	"bytes"
 	myAES "cryptopals/aes"
 	"cryptopals/basics"
+	"cryptopals/codebreaking"
 	"cryptopals/oracle"
 	"cryptopals/repeatingKey"
 	"encoding/base64"
@@ -129,6 +130,11 @@ func challenge_11(args ...string) {
 
 }
 
+func challenge_12(args ...string) {
+	solution := codebreaking.BreakAppendingOracle()
+	fmt.Println(string(solution))
+}
+
 func main() {
 	fnMap := map[string]func(...string){
 		"3":  challenge_3,
@@ -139,6 +145,7 @@ func main() {
 		"8":  challenge_8,
 		"10": challenge_10,
 		"11": challenge_11,
+		"12": challenge_12,
 	}
 	flag.Parse()
 	if len(flag.Args()) < 1 {
