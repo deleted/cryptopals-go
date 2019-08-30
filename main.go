@@ -155,7 +155,6 @@ func main() {
 	fcn, exists := fnMap[subcommand]
 	if !exists {
 		log.Fatal("Unrecognised subcommand")
-		log.Fatal("Valid keys are {}", getStringKeys(fnMap))
 	}
 
 	fcn(flag.Args()...)
@@ -167,12 +166,4 @@ func readLines(filename string) []string {
 	str := string(dat)
 	return strings.Split(str, "\n")
 
-}
-
-func getStringKeys(m map) []string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		append(keys, k)
-	}
-	return keys
 }
