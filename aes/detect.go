@@ -2,7 +2,7 @@ package aes
 
 import (
 	"bytes"
-	blocklib "cryptopals/blocks"
+	blocklib "github.com/deleted/cryptopals-go/blocks"
 	"fmt"
 	"sort"
 )

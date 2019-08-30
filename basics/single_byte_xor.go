@@ -1,7 +1,7 @@
 package basics
 
 import (
-	"cryptopals/frequency"
+	"github.com/deleted/cryptopals-go/frequency"
 	"sort"
 	"unicode"
 )

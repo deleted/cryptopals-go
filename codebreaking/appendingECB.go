@@ -2,9 +2,9 @@ package codebreaking
 
 import (
 	"bytes"
-	myAES "cryptopals/aes"
-	"cryptopals/blocks"
-	"cryptopals/oracle"
+	myAES "github.com/deleted/cryptopals-go/aes"
+	"github.com/deleted/cryptopals-go/blocks"
+	"github.com/deleted/cryptopals-go/oracle"
 	"log"
 )
 

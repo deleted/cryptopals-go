@@ -6,7 +6,7 @@ https://cryptopals.com/sets/2/challenges/12
 */
 
 import (
-	myAES "cryptopals/aes"
+	myAES "github.com/deleted/cryptopals-go/aes"
 	"encoding/base64"
 	"log"
 	"math/rand"

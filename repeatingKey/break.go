@@ -1,8 +1,8 @@
 package repeatingKey
 
 import (
-	"cryptopals/basics"
-	blocklib "cryptopals/blocks"
+	"github.com/deleted/cryptopals-go/basics"
+	blocklib "github.com/deleted/cryptopals-go/blocks"
 	"fmt"
 	"sort"
 )

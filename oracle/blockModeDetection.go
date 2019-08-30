@@ -2,7 +2,7 @@ package oracle
 
 import (
 	"bytes"
-	myAES "cryptopals/aes"
+	myAES "github.com/deleted/cryptopals-go/aes"
 	"fmt"
 	"log"
 	"math/rand"

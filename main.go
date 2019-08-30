@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"bytes"
-	myAES "cryptopals/aes"
-	"cryptopals/basics"
-	"cryptopals/codebreaking"
-	"cryptopals/oracle"
-	"cryptopals/repeatingKey"
+	myAES "github.com/deleted/cryptopals-go/aes"
+	"github.com/deleted/cryptopals-go/basics"
+	"github.com/deleted/cryptopals-go/codebreaking"
+	"github.com/deleted/cryptopals-go/oracle"
+	"github.com/deleted/cryptopals-go/repeatingKey"
 	"encoding/base64"
 	"encoding/hex"
 	"flag"
@@ -155,6 +155,7 @@ func main() {
 	fcn, exists := fnMap[subcommand]
 	if !exists {
 		log.Fatal("Unrecognised subcommand")
+		log.Fatal("Valid keys are {}", getStringKeys(fnMap))
 	}
 
 	fcn(flag.Args()...)
@@ -166,4 +167,12 @@ func readLines(filename string) []string {
 	str := string(dat)
 	return strings.Split(str, "\n")
 
+}
+
+func getStringKeys(m map) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		append(keys, k)
+	}
+	return keys
 }

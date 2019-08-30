@@ -1,7 +1,7 @@
 package codebreaking
 
 import "testing"
-import "cryptopals/oracle"
+import "github.com/deleted/cryptopals-go/oracle"
 
 func TestDetectBlockSize(t *testing.T) {
 	oracle := oracle.MakeAppendingOracle(16)
