@@ -3,11 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	myAES "github.com/deleted/cryptopals-go/aes"
-	"github.com/deleted/cryptopals-go/basics"
-	"github.com/deleted/cryptopals-go/codebreaking"
-	"github.com/deleted/cryptopals-go/oracle"
-	"github.com/deleted/cryptopals-go/repeatingKey"
 	"encoding/base64"
 	"encoding/hex"
 	"flag"
@@ -18,6 +13,12 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	myAES "github.com/deleted/cryptopals-go/aes"
+	"github.com/deleted/cryptopals-go/basics"
+	"github.com/deleted/cryptopals-go/codebreaking"
+	"github.com/deleted/cryptopals-go/oracle"
+	"github.com/deleted/cryptopals-go/repeatingKey"
 )
 
 func check(err error) {
@@ -26,7 +27,7 @@ func check(err error) {
 	}
 }
 
-func challenge_3(args ...string) {
+func challenge3(args ...string) {
 	/*
 		Single-byte XOR cipher
 		The hex encoded string:
@@ -43,13 +44,13 @@ func challenge_3(args ...string) {
 	fmt.Println(results[0].Text)
 }
 
-func challenge_4(args ...string) {
+func challenge4(args ...string) {
 	datafilename := "./data/4.txt"
 	result := basics.ParallelXorSolve(datafilename)
 	fmt.Println(result)
 }
 
-func challenge_5(args ...string) {
+func challenge5(args ...string) {
 
 	if len(args) < 2 {
 		log.Fatal("Key required")
@@ -62,7 +63,7 @@ func challenge_5(args ...string) {
 	fmt.Println(output)
 }
 
-func challenge_6(args ...string) {
+func challenge6(args ...string) {
 	b64EncodedCypher, _ := ioutil.ReadFile("./data/6.txt")
 	cypherBytes := make([]byte, len(b64EncodedCypher))
 	_, _ = base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
@@ -71,7 +72,7 @@ func challenge_6(args ...string) {
 	fmt.Print(string(solution))
 }
 
-func challenge_7(args ...string) {
+func challenge7(args ...string) {
 	b64EncodedCypher, err := ioutil.ReadFile("./data/7.txt")
 	cypherBytes := make([]byte, len(b64EncodedCypher))
 	bytesRead, err := base64.StdEncoding.Decode(cypherBytes, b64EncodedCypher)
@@ -84,7 +85,7 @@ func challenge_7(args ...string) {
 	fmt.Println(string(plainText))
 }
 
-func challenge_8(args ...string) {
+func challenge8(args ...string) {
 	filename := "./data/8.txt"
 	for _, line := range readLines(filename) {
 		cypher, err := hex.DecodeString(line)
@@ -97,7 +98,7 @@ func challenge_8(args ...string) {
 	}
 }
 
-func challenge_10(args ...string) {
+func challenge10(args ...string) {
 	filename := "./data/10.txt"
 	b64EncodedCypher, err := ioutil.ReadFile(filename)
 	cypherBytes := make([]byte, len(b64EncodedCypher))
@@ -112,7 +113,7 @@ func challenge_10(args ...string) {
 	fmt.Print(string(clearBytes))
 }
 
-func challenge_11(args ...string) {
+func challenge11(args ...string) {
 	filename := "./data/booker_prize.txt"
 	funtext, err := ioutil.ReadFile(filename)
 	check(err)
@@ -130,22 +131,22 @@ func challenge_11(args ...string) {
 
 }
 
-func challenge_12(args ...string) {
+func challenge12(args ...string) {
 	solution := codebreaking.BreakAppendingOracle()
 	fmt.Println(string(solution))
 }
 
 func main() {
 	fnMap := map[string]func(...string){
-		"3":  challenge_3,
-		"4":  challenge_4,
-		"5":  challenge_5,
-		"6":  challenge_6,
-		"7":  challenge_7,
-		"8":  challenge_8,
-		"10": challenge_10,
-		"11": challenge_11,
-		"12": challenge_12,
+		"3":  challenge3,
+		"4":  challenge4,
+		"5":  challenge5,
+		"6":  challenge6,
+		"7":  challenge7,
+		"8":  challenge8,
+		"10": challenge10,
+		"11": challenge11,
+		"12": challenge12,
 	}
 	flag.Parse()
 	if len(flag.Args()) < 1 {
